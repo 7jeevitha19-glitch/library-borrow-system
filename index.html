@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Library Book Borrowing System</title>
 
     <style>
@@ -35,6 +37,8 @@
             padding: 12px;
             margin-top: 6px;
             box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
         }
 
         button {
@@ -51,6 +55,7 @@
         #result {
             margin-top: 20px;
             padding: 15px;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -59,7 +64,9 @@
 
 <div class="container">
 
-    <h1>📚 Library Borrowing</h1>
+    <h1>📚 Library Book Borrowing</h1>
+
+    <p>Enter your details to borrow a book.</p>
 
     <form id="borrowForm">
 
@@ -70,24 +77,30 @@
         <input type="text" id="usn" required>
 
         <label>Mobile Number</label>
-        <input type="tel" id="mobile"
-               maxlength="10"
-               pattern="[0-9]{10}"
-               required>
+        <input
+            type="tel"
+            id="mobile"
+            maxlength="10"
+            pattern="[0-9]{10}"
+            placeholder="10-digit mobile number"
+            required
+        >
 
         <label>Book Name</label>
         <input type="text" id="book" required>
 
-        <label>Book ID</label>
+        <label>Book ID / Accession Number</label>
         <input type="text" id="bookId" required>
 
         <label>Borrow Date</label>
         <input type="date" id="borrowDate" required>
 
-        <label>Return Date (after 10 days)</label>
+        <label>Return Date</label>
         <input type="date" id="returnDate" readonly>
 
-        <button type="submit">Borrow Book</button>
+        <button type="submit">
+            Borrow Book
+        </button>
 
     </form>
 
@@ -95,61 +108,110 @@
 
 </div>
 
+
 <script>
 
 const borrowDate = document.getElementById("borrowDate");
 const returnDate = document.getElementById("returnDate");
 
+
+// Get today's date
 const today = new Date();
 
-borrowDate.value =
+const todayString =
     today.getFullYear() + "-" +
     String(today.getMonth() + 1).padStart(2, "0") + "-" +
     String(today.getDate()).padStart(2, "0");
 
 
+// Put today's date automatically
+borrowDate.value = todayString;
+
+
+// Calculate return date
 function calculateReturnDate() {
 
     const date = new Date(borrowDate.value);
 
     date.setDate(date.getDate() + 10);
 
-    returnDate.value =
-        date.getFullYear() + "-" +
-        String(date.getMonth() + 1).padStart(2, "0") + "-" +
+    const year = date.getFullYear();
+
+    const month =
+        String(date.getMonth() + 1).padStart(2, "0");
+
+    const day =
         String(date.getDate()).padStart(2, "0");
+
+    returnDate.value =
+        year + "-" + month + "-" + day;
 }
 
+
+// Calculate when page opens
 calculateReturnDate();
 
-borrowDate.addEventListener("change", calculateReturnDate);
+
+// Recalculate if borrowing date changes
+borrowDate.addEventListener(
+    "change",
+    calculateReturnDate
+);
 
 
-document.getElementById("borrowForm").addEventListener("submit", function(event) {
+// When form is submitted
+document.getElementById("borrowForm")
+.addEventListener("submit", function(event) {
 
     event.preventDefault();
 
     calculateReturnDate();
 
-    const name = document.getElementById("name").value;
-    const usn = document.getElementById("usn").value;
-    const mobile = document.getElementById("mobile").value;
-    const book = document.getElementById("book").value;
-    const bookId = document.getElementById("bookId").value;
+    const name =
+        document.getElementById("name").value;
+
+    const usn =
+        document.getElementById("usn").value;
+
+    const mobile =
+        document.getElementById("mobile").value;
+
+    const book =
+        document.getElementById("book").value;
+
+    const bookId =
+        document.getElementById("bookId").value;
 
     document.getElementById("result").innerHTML =
+
         "<h3>✅ Book Borrowed Successfully</h3>" +
-        "<p><b>Name:</b> " + name + "</p>" +
-        "<p><b>USN:</b> " + usn + "</p>" +
-        "<p><b>Mobile:</b> " + mobile + "</p>" +
-        "<p><b>Book:</b> " + book + "</p>" +
-        "<p><b>Book ID:</b> " + bookId + "</p>" +
-        "<p><b>Borrow Date:</b> " + borrowDate.value + "</p>" +
-        "<p><b>Return Date:</b> " + returnDate.value + "</p>";
+
+        "<p><b>Student:</b> " +
+        name + "</p>" +
+
+        "<p><b>USN:</b> " +
+        usn + "</p>" +
+
+        "<p><b>Mobile:</b> " +
+        mobile + "</p>" +
+
+        "<p><b>Book:</b> " +
+        book + "</p>" +
+
+        "<p><b>Book ID:</b> " +
+        bookId + "</p>" +
+
+        "<p><b>Borrow Date:</b> " +
+        borrowDate.value + "</p>" +
+
+        "<p><b>Return Date:</b> " +
+        returnDate.value + "</p>" +
+
+        "<p>📱 Reminder will be configured separately.</p>";
 
 });
 
 </script>
 
 </body>
-  </html>
+            </html>
