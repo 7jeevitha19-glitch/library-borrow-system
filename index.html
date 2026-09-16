@@ -1,1 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Book Borrowing System</title>
 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 25px;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📚 Library Borrowing</h1>
+
+    <form id="borrowForm">
+
+        <label>Student Name</label>
+        <input type="text" id="name" required>
+
+        <label>USN</label>
+        <input type="text" id="usn" required>
+
+        <label>Mobile Number</label>
+        <input type="tel" id="mobile"
+               maxlength="10"
+               pattern="[0-9]{10}"
+               required>
+
+        <label>Book Name</label>
+        <input type="text" id="book" required>
+
+        <label>Book ID</label>
+        <input type="text" id="bookId" required>
+
+        <label>Borrow Date</label>
+        <input type="date" id="borrowDate" required>
+
+        <label>Return Date (after 10 days)</label>
+        <input type="date" id="returnDate" readonly>
+
+        <button type="submit">Borrow Book</button>
+
+    </form>
+
+    <div id="result"></div>
+
+</div>
+
+<script>
+
+const borrowDate = document.getElementById("borrowDate");
+const returnDate = document.getElementById("returnDate");
+
+const today = new Date();
+
+borrowDate.value =
+    today.getFullYear() + "-" +
+    String(today.getMonth() + 1).padStart(2, "0") + "-" +
+    String(today.getDate()).padStart(2, "0");
+
+
+function calculateReturnDate() {
+
+    const date = new Date(borrowDate.value);
+
+    date.setDate(date.getDate() + 10);
+
+    returnDate.value =
+        date.getFullYear() + "-" +
+        String(date.getMonth() + 1).padStart(2, "0") + "-" +
+        String(date.getDate()).padStart(2, "0");
+}
+
+calculateReturnDate();
+
+borrowDate.addEventListener("change", calculateReturnDate);
+
+
+document.getElementById("borrowForm").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    calculateReturnDate();
+
+    const name = document.getElementById("name").value;
+    const usn = document.getElementById("usn").value;
+    const mobile = document.getElementById("mobile").value;
+    const book = document.getElementById("book").value;
+    const bookId = document.getElementById("bookId").value;
+
+    document.getElementById("result").innerHTML =
+        "<h3>✅ Book Borrowed Successfully</h3>" +
+        "<p><b>Name:</b> " + name + "</p>" +
+        "<p><b>USN:</b> " + usn + "</p>" +
+        "<p><b>Mobile:</b> " + mobile + "</p>" +
+        "<p><b>Book:</b> " + book + "</p>" +
+        "<p><b>Book ID:</b> " + bookId + "</p>" +
+        "<p><b>Borrow Date:</b> " + borrowDate.value + "</p>" +
+        "<p><b>Return Date:</b> " + returnDate.value + "</p>";
+
+});
+
+</script>
+
+</body>
+  </html>
